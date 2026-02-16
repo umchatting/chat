@@ -109,4 +109,66 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/friend', async (req, res) => {
+    const { type, data } = req.body;
+    if (type === 'phone') {
+        try {
+            const [rows] = await db.query(
+                `SELECT id FROM users WHERE phone = (?)`, [data]
+            );
+
+            if (rows.length > 0) {
+                return res.status(200).json({ ok: true, id: rows[0].id});
+            } else {
+                return res.status(500).json({ ok: false, error: 'NO_SUCH_DATA'})
+            };
+
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ ok: false, error: 'INTERNAL_SERVER_ERROR'});
+        }
+    };
+
+    if (type === 'email') {
+        try {
+            const [rows] = await db.query(
+                `SELECT id FROM users WHERE email = (?)`, [data]
+            );
+
+            if (rows.length > 0) {
+                return res.status(200).json({ ok: true, id: rows[0].id});
+            } else {
+                return res.status(500).json({ ok: false, error: 'NO_SUCH_DATA'})
+            }
+            
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ ok: false, error: 'INTERNAL_SERVER_ERROR'});
+        }
+    };
+
+    if (type === 'uid') {
+        try {
+            const [rows] = await db.query(
+                `SELECT id FROM users WHERE uid = (?)`, [data]
+            );
+
+            if (rows.length > 0) {
+                return res.status(200).json({ ok: true, id: rows[0].id});
+            } else {
+                return res.status(500).json({ ok: false, error: 'NO_SUCH_DATA'})
+            };
+
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ ok: false, error: 'INTERNAL_SERVER_ERROR'});
+        }
+    }    
+
+    else {
+        return res.status(400).json({ ok: false, error: 'INVALID_TYPE' });
+    };
+    
+});
+
 module.exports = router;

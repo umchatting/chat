@@ -58,12 +58,14 @@ module.exports = (io) => {
             from:
             to:
         }*/
-        socket.on('join_room', async ({from, to}, ack)=> {
+        socket.on('join_room', async ({ to }, ack)=> {
+            const from = socket.id;
+
             if (typeof ack != 'function') {
                 return;
             }
             
-            if (from == null ||to == null) {
+            if (to == null) {
                 ack({ ok: false, error: 'INVALID_PAYLOAD'});
                 return;
             };
@@ -93,7 +95,7 @@ module.exports = (io) => {
             try {
                 const [result] = await db.query(
                     'INSERT INTO chats (room_id, sender_id, content, created_at) VALUES (?,?,?,NOW())',
-                    [msg.roomId, msg.from, msg.content]
+                    [msg.roomId, socket.id, msg.content]
                 );
                 socket.to(msg.roomId).emit('receive_message', {
                     ...msg,
@@ -111,6 +113,8 @@ module.exports = (io) => {
         });
 
         socket.on('leave_room', ({roomId}) => {
+            console.log(roomId);
+            console.log(socket.id, ' left room ', roomId);
             socket.leave(roomId);
         });
 

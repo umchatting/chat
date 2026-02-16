@@ -1,4 +1,4 @@
-const {signup, connect, login, join_room, send_message, get_friend} = require('./fe/module');
+const {signup, connect, login, join_room, send_message, get_friend, leave_room} = require('./fe/module');
 
 
 
@@ -20,12 +20,13 @@ const phone = '01072684290';
 
 (async () => {
     const resp = await login(uid, upw);
-    connect(resp.token);
+    await connect(resp.token)
     const friend = await get_friend('uid', 'test2');
-    const roomInfo = await join_room(friend.id);
-    console.log(roomInfo);
-    send_message({ 
-        roomId: `${roomInfo.roomId}`, 
+    const roomId = await join_room(friend.id);
+    const sent = await send_message({ 
+        roomId: `${roomId}`, 
         content: 'test'
     });
+    console.log(sent);
+    leave_room(roomId);
 })();

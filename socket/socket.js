@@ -113,6 +113,8 @@ module.exports = (io) => {
         });
 
         socket.on('leave_room', ({roomId}) => {
+            console.log(roomId);
+            console.log(socket.id, ' left room ', roomId);
             socket.leave(roomId);
         });
 

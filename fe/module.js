@@ -58,14 +58,14 @@ async function join_room(from, to) {
     });
 };
 */
-async function join_room(from, to) {
+async function join_room(to) {
     return new Promise((resolve, reject) => {
-        socket.emit('join_room', { from, to }, (res) => {
+        socket.emit('join_room', { to }, (res) => {
             if (res.ok) {
-                resolve(res.roomId); // 여기서 실제 roomId 반환
+                resolve(res); // 여기서 실제 roomId 반환
             } else {
                 console.error('join_room: ', res.error);
-                reject(res.error);
+                reject(res);
             }
         });
     });

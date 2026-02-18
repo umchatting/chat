@@ -1,9 +1,9 @@
 const { io } = require('socket.io-client');
 const axios = require('axios');
-const socket = io('http://localhost:3000', {
+const socket = io(process.env.SERVER_URL, {
     autoConnect: false
 });
-const serverUrl = "http://localhost:3000"
+const serverUrl = process.env.SERVER_URL;
 
 
 async function connect(token) {
@@ -47,21 +47,7 @@ async function login(uid, upw) {
     });
 };
 
-// ===============BE code==============//
-/*
-async function join_room(from, to) {
-    socket.emit('join_room', {from, to}, async (res) => {
-        if (res.ok) {
-            openRoomUi();
-            let roomId = await res.roomId;
-            console.log('roomId: ', roomId)
-            return roomId;
-        } else{
-            console.error('join_room: ', res.error);
-        };
-    });
-};
-*/
+//=========functions related to Modules==========//
 async function join_room(to) {
     return new Promise(async (resolve, reject) => {
         socket.emit('join_room', { to }, (res) => {

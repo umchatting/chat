@@ -28,8 +28,29 @@ async function findRoom(from, to) {
 };
 
 const db = require('../db/db');
+const jwt = require('../utils/jwt');
 
 module.exports = (io) => {
+    io.use((socket, next) => {
+        const token = socket.handshake.auth.token; 
+
+        if (!token) {
+            console.error("NO_TOKEN");
+            return next(new Error("NO_TOKEN"));
+        };
+
+        try {
+            const decoded = jwt.verify(token);
+            console.log(decoded);
+            socket.id = decoded.userId;
+            console.log("Passing jwt middleware");
+            next();
+        } catch(err) {
+            console.log("INVALID_TOKEN, ", decoded);
+            next(new Error("INVALID_TOKEN"));
+        };
+    });
+
     io.on('connection', (socket) => {
         console.log('connected: ' + socket.id);
         /*msg={
@@ -37,12 +58,14 @@ module.exports = (io) => {
             from:
             to:
         }*/
-        socket.on('join_room', async ({from, to}, ack)=> {
+        socket.on('join_room', async ({ to }, ack)=> {
+            const from = socket.id;
+
             if (typeof ack != 'function') {
                 return;
             }
             
-            if (from == null ||to == null) {
+            if (to == null) {
                 ack({ ok: false, error: 'INVALID_PAYLOAD'});
                 return;
             };
@@ -72,7 +95,7 @@ module.exports = (io) => {
             try {
                 const [result] = await db.query(
                     'INSERT INTO chats (room_id, sender_id, content, created_at) VALUES (?,?,?,NOW())',
-                    [msg.roomId, msg.from, msg.content]
+                    [msg.roomId, socket.id, msg.content]
                 );
                 socket.to(msg.roomId).emit('receive_message', {
                     ...msg,
@@ -90,6 +113,8 @@ module.exports = (io) => {
         });
 
         socket.on('leave_room', ({roomId}) => {
+            console.log(roomId);
+            console.log(socket.id, ' left room ', roomId);
             socket.leave(roomId);
         });
 
@@ -97,4 +122,4 @@ module.exports = (io) => {
             console.log('disconnected: ', socket.id);
         })
     });
-}
+};

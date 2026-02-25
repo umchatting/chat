@@ -1,9 +1,9 @@
 // utils/jwt.js
 const jwt = require('jsonwebtoken');
-const SECRET = 'MY_SECRET';
+const SECRET = process.env.jwt_secret;
 
 function sign(payload) {
-  return jwt.sign(payload, SECRET);
+  return jwt.sign(payload, SECRET, {expiresIn: '24h'});
 }
 
 function verify(token) {

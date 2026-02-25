@@ -5,6 +5,6 @@ module.exports = function createApp() {
     const app = express();
     
     app.use(express.json());
-    app.use('/routes/auth', authRoutes);
+    app.use('/auth', authRoutes);
     return app;
 };

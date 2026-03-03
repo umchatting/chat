@@ -102,5 +102,7 @@ async function leave_room(roomId) {
     console.log('left room: ', roomId);
 };
 
+console.log(process.env.DB_TABLE);
+
 
 module.exports = {signup, connect, login, join_room, send_message, get_friend, leave_room};

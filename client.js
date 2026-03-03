@@ -1,8 +1,5 @@
+const dotenv = require('dotenv').config({path: './.env'});
 const {signup, connect, login, join_room, send_message, get_friend, leave_room} = require('./fe/module');
-
-
-
-
 
 const uid = 'test';
 const upw = 'testtest123!@';

@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({path: './.env'});
 const {signup, connect, login, join_room, send_message, get_friend} = require('./fe/module');
 
 

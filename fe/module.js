@@ -1,5 +1,7 @@
 const { io } = require('socket.io-client');
 const axios = require('axios');
+const { isPassportNumber } = require('validator');
+const dotenv  = require('dotenv').config({path: '../.env'})
 const socket = io(process.env.SERVER_URL, {
     autoConnect: false
 });
@@ -53,7 +55,7 @@ async function join_room(to) {
         socket.emit('join_room', { to }, (res) => {
             if (res.ok) {
                 console.log('join_room: ', res.roomId)
-                resolve(res.roomId); // 여기서 실제 roomId 반환
+                resolve(res.roomId); // 여기서 실제 roomId 반환 
             } else {
                 console.error('join_room: ', res.error);
                 reject(res.error);
@@ -102,7 +104,15 @@ async function leave_room(roomId) {
     console.log('left room: ', roomId);
 };
 
-console.log(process.env.DB_TABLE);
+async function test() {
+    if (test.require == 'main') {
+        return true;
+    } else {
+        console.log(process.env.DB_TABLE)
+    }
+};
+
+test();
 
 
 module.exports = {signup, connect, login, join_room, send_message, get_friend, leave_room};

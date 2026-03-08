@@ -7,7 +7,6 @@ const socket = io(process.env.SERVER_URL, {
 });
 const serverUrl = process.env.SERVER_URL;
 
-
 async function connect(token) {
     socket.auth = { token } ;
     socket.connect();
@@ -34,6 +33,9 @@ async function signup(uid, upw, upw_c, email, phone) {
 
 async function login(uid, upw) {
     const loginUrl = serverUrl + '/auth/login';
+    console.log(loginUrl);
+    console.log(process.env.SERVER_URL);
+
     //console.log(loginUrl)
     return new Promise(async (resolve, reject) => {
         try {
@@ -75,7 +77,7 @@ async function send_message(msg) {
                 console.log('send_message failed ', msg)
                 reject(res);
             };
-        });
+        }); 
     });
 }; 
 
@@ -104,15 +106,6 @@ async function leave_room(roomId) {
     console.log('left room: ', roomId);
 };
 
-async function test() {
-    if (test.require == 'main') {
-        return true;
-    } else {
-        console.log(process.env.DB_TABLE)
-    }
-};
-
-test();
 
 // testing edit
 module.exports = {signup, connect, login, join_room, send_message, get_friend, leave_room};

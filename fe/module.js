@@ -45,9 +45,11 @@ async function login(uid, upw) {
             });
             resolve(res.data);
         } catch (err) {
-            console.log(err)
-            reject(err.response.data);
+            //console.log(err);
+            reject(err.response?.data || err.message);
         };
+    }).catch((error) => {
+        return error;
     });
 };
 

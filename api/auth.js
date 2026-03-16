@@ -59,7 +59,7 @@ router.post('/signup', async (req, res) => {
         console.log(err);
         if (err.code === 'ER_DUP_ENTRY') {
             const match = err.sqlMessage.match(/for key '(.+)'/);
-
+            console.log(match);
             if (match) {
                 const key = match[1];
 
@@ -74,6 +74,8 @@ router.post('/signup', async (req, res) => {
                 if (key.includes('phone')) {
                     return res.status(400).json({ ok:false, error:'PHONE_ALREADY_EXISTS' });
                 }
+            } else {
+                return res.status()
             };
         };
         //console.log(err);

@@ -14,10 +14,22 @@ const phone = '01072684290';
     console.log(resp.id);
 })();*/
 
+(async () => {
+    let resp = await signup(uid, upw, upw_c, email, phone);
+    console.log(resp);
+
+})();
+
 
 (async () => {
     const resp = await login(uid, upw);
-    await connect(resp.token)
+    if (!resp || !resp.ok) {
+        console.error(resp);
+        return;
+    }
+
+    await connect(resp.token);
+
     const friend = await get_friend('uid', 'test2');
     const roomId = await join_room(friend.id);
     const sent = await send_message({ 

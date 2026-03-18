@@ -13,7 +13,21 @@ async function connect(token) {
 };
 
 async function signup(uid, upw, upw_c, email, phone) {
-    const signupUrl = serverUrl + '/auth/signup';
+    const signUpUrl = serverUrl + '/auth/signup';
+
+    try{ 
+        const res = await axios.post(signUpUrl, {
+            uid: `${uid}`,
+            upw: `${upw}`,
+            upw_c: `${upw_c}`,
+            email: `${email}`,
+            phone: `${phone}`
+        });
+        console.log(res)
+    } catch (err) {
+        console.log(err.status);
+        return(err.status);
+    };  
 
     /* anti-pattern
     return new Promise(async (resolve, reject) => {
@@ -39,6 +53,18 @@ async function login(uid, upw) {
     console.log(loginUrl);
     console.log(process.env.SERVER_URL);
 
+        try {
+            const res = await axios.post(loginUrl, {
+                uid: `${uid}`,
+                upw: `${upw}`
+            });
+            return(res.data);
+        } catch (err) {
+            //console.log(err);
+            return(err.response?.data || err.message);
+        };
+
+
     //console.log(loginUrl)
 
     /* anti-pattern
@@ -62,6 +88,16 @@ async function login(uid, upw) {
 //=========functions related to Modules==========//
 async function join_room(to) {
 
+    socket.emit('join_room', { to }, (res) => {
+        if (res.ok) {
+            console.log('join_room: ', res.roomId)
+            return(res.roomId); // 여기서 실제 roomId 반환 
+        } else {
+            console.error('join_room: ', res.error);
+            return(res.error);
+        }
+    });
+
     /*anti-pattern
     return new Promise(async (resolve, reject) => {
         socket.emit('join_room', { to }, (res) => {
@@ -79,7 +115,15 @@ async function join_room(to) {
 
 async function send_message(msg) {
     console.log('sending messages: ', msg);
-
+    socket.emit('send_message', msg, (res) => {
+        if (res.ok) {
+            console.log('send_message: ', msg);
+            return(res);
+        } else {
+            console.log('send_message failed ', msg)
+            return(res);
+        };
+        }); 
     /*anti-pattern
     return new Promise(async (resolve, reject) => {
         socket.emit('send_message', msg, (res) => {
@@ -99,7 +143,20 @@ async function get_friend(type, input) {
     const getFriendUrl = serverUrl + '/auth/friend';
     //console.log(getFriendUrl);
 
-    
+    try {
+        const res = await axios.post(getFriendUrl, {
+            type: `${type}`,
+            data: `${input}`
+        });
+        if (res.data.ok) {
+            resolve(res.data);
+        } else {
+            reject({ ok: false });
+        };
+    } catch (err) {
+        reject(err.response.data);
+    };
+
     /* anti-pattern
     return new Promise(async (resolve, reject) => {
         try {

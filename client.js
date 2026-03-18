@@ -20,7 +20,7 @@ const phone = '01072684290';
 
 })();
 
-
+/*
 (async () => {
     const resp = await login(uid, upw);
     if (!resp || !resp.ok) {
@@ -38,7 +38,7 @@ const phone = '01072684290';
     });
     console.log(sent);
     leave_room(roomId);
-})();
+})();*/
 
 //test test
 //test

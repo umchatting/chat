@@ -64,6 +64,7 @@ router.post('/signup', async (req, res) => {
                 const key = match[1];
 
                 if (key.includes('uid')) {
+                    console.log('dupEntry_id')
                     return res.status(400).json({ ok:false, error:'UID_ALREADY_EXISTS' });
                 }
 

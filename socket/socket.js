@@ -120,6 +120,6 @@ module.exports = (io) => {
 
         socket.on('disconnect', () => {
             console.log('disconnected: ', socket.id);
-        })
+        });
     });
 };

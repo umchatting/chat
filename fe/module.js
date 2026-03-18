@@ -14,6 +14,8 @@ async function connect(token) {
 
 async function signup(uid, upw, upw_c, email, phone) {
     const signupUrl = serverUrl + '/auth/signup';
+
+    /* anti-pattern
     return new Promise(async (resolve, reject) => {
         try {
             const res = await axios.post(signupUrl, {
@@ -29,6 +31,7 @@ async function signup(uid, upw, upw_c, email, phone) {
             reject(err.response.data);
         };
     });
+    */
 };
 
 async function login(uid, upw) {
@@ -37,6 +40,8 @@ async function login(uid, upw) {
     console.log(process.env.SERVER_URL);
 
     //console.log(loginUrl)
+
+    /* anti-pattern
     return new Promise(async (resolve, reject) => {
         try {
             const res = await axios.post(loginUrl, {
@@ -51,10 +56,13 @@ async function login(uid, upw) {
     }).catch((error) => {
         return error;
     });
+    */
 };
 
 //=========functions related to Modules==========//
 async function join_room(to) {
+
+    /*anti-pattern
     return new Promise(async (resolve, reject) => {
         socket.emit('join_room', { to }, (res) => {
             if (res.ok) {
@@ -66,10 +74,13 @@ async function join_room(to) {
             }
         });
     });
+    */
 };
 
 async function send_message(msg) {
     console.log('sending messages: ', msg);
+
+    /*anti-pattern
     return new Promise(async (resolve, reject) => {
         socket.emit('send_message', msg, (res) => {
             if (res.ok) {
@@ -81,11 +92,15 @@ async function send_message(msg) {
             };
         }); 
     });
+    */
 }; 
 
 async function get_friend(type, input) {
     const getFriendUrl = serverUrl + '/auth/friend';
     //console.log(getFriendUrl);
+
+    
+    /* anti-pattern
     return new Promise(async (resolve, reject) => {
         try {
             const res = await axios.post(getFriendUrl, {
@@ -101,6 +116,7 @@ async function get_friend(type, input) {
             reject(err.response.data);
         };
     });
+    */ 
 };
 
 async function leave_room(roomId) {

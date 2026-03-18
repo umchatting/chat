@@ -85,18 +85,7 @@ async function login(uid, upw) {
 
 //=========functions related to Modules==========//
 async function join_room(to) {
-
-    socket.emit('join_room', { to }, (res) => {
-        if (res.ok) {
-            console.log('join_room: ', res.roomId)
-            return(res.roomId); // 여기서 실제 roomId 반환 
-        } else {
-            console.error('join_room error: ', res.error);
-            return(res.error);
-        }
-    });
-
-    /*anti-pattern
+    
     return new Promise(async (resolve, reject) => {
         socket.emit('join_room', { to }, (res) => {
             if (res.ok) {
@@ -108,7 +97,7 @@ async function join_room(to) {
             }
         });
     });
-    */
+    
 };
 
 async function send_message(msg) {
@@ -140,12 +129,12 @@ async function send_message(msg) {
 async function get_friend(type, input) {
     const getFriendUrl = serverUrl + '/auth/friend';
     //console.log(getFriendUrl);
-
     try {
         const res = await axios.post(getFriendUrl, {
             type: `${type}`,
             data: `${input}`
         });
+
         if (res.data.ok) {
             return(res.data);
         } else {

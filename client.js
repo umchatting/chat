@@ -24,21 +24,24 @@ const phone = '01072684290';
 (async () => {
     const resp = await login(uid, upw);
     if (!resp || !resp.ok) {
+        console.log('resp:')
         console.error(resp);
         return;
     }
 
     await connect(resp.token);
-    console.log(resp.token)
 
     const friend = await get_friend('uid', 'test2'); //if friend not exist?
+    console.log('friend: ', friend)
+
     const roomId = await join_room(friend.id);
-    const sent = await send_message({ 
-        roomId: `${roomId}`, 
-        content: 'test'
-    });
-    console.log(sent);
-    leave_room(roomId);
+    console.log('module' , roomId);
+    //const sent = await send_message({ 
+    //    roomId: `${roomId}`, 
+    //    content: 'test'
+    //});
+    //console.log(sent);
+    //leave_room(roomId);
 })();
 
 //test test

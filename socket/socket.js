@@ -72,7 +72,7 @@ module.exports = (io) => {
             let room = await findRoom(from, to);
             if(!room){
                 try {
-                    room = await createRoom(from, to);
+                    room = await createRoomId(from, to);
                 } catch(e) {
                     room = await findRoom(from, to);
                 }

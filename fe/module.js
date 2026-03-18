@@ -50,8 +50,6 @@ async function signup(uid, upw, upw_c, email, phone) {
 
 async function login(uid, upw) {
     const loginUrl = serverUrl + '/auth/login';
-    console.log(loginUrl);
-    console.log(process.env.SERVER_URL);
 
         try {
             const res = await axios.post(loginUrl, {
@@ -87,18 +85,7 @@ async function login(uid, upw) {
 
 //=========functions related to Modules==========//
 async function join_room(to) {
-
-    socket.emit('join_room', { to }, (res) => {
-        if (res.ok) {
-            console.log('join_room: ', res.roomId)
-            return(res.roomId); // 여기서 실제 roomId 반환 
-        } else {
-            console.error('join_room: ', res.error);
-            return(res.error);
-        }
-    });
-
-    /*anti-pattern
+    
     return new Promise(async (resolve, reject) => {
         socket.emit('join_room', { to }, (res) => {
             if (res.ok) {
@@ -110,7 +97,7 @@ async function join_room(to) {
             }
         });
     });
-    */
+    
 };
 
 async function send_message(msg) {
@@ -142,19 +129,19 @@ async function send_message(msg) {
 async function get_friend(type, input) {
     const getFriendUrl = serverUrl + '/auth/friend';
     //console.log(getFriendUrl);
-
     try {
         const res = await axios.post(getFriendUrl, {
             type: `${type}`,
             data: `${input}`
         });
+
         if (res.data.ok) {
-            resolve(res.data);
+            return(res.data);
         } else {
-            reject({ ok: false });
+            return({ ok: false });
         };
     } catch (err) {
-        reject(err.response.data);
+        return(err.response.data);
     };
 
     /* anti-pattern

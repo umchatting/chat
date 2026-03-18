@@ -50,8 +50,6 @@ async function signup(uid, upw, upw_c, email, phone) {
 
 async function login(uid, upw) {
     const loginUrl = serverUrl + '/auth/login';
-    console.log(loginUrl);
-    console.log(process.env.SERVER_URL);
 
         try {
             const res = await axios.post(loginUrl, {
@@ -93,7 +91,7 @@ async function join_room(to) {
             console.log('join_room: ', res.roomId)
             return(res.roomId); // 여기서 실제 roomId 반환 
         } else {
-            console.error('join_room: ', res.error);
+            console.error('join_room error: ', res.error);
             return(res.error);
         }
     });
@@ -149,12 +147,12 @@ async function get_friend(type, input) {
             data: `${input}`
         });
         if (res.data.ok) {
-            resolve(res.data);
+            return(res.data);
         } else {
-            reject({ ok: false });
+            return({ ok: false });
         };
     } catch (err) {
-        reject(err.response.data);
+        return(err.response.data);
     };
 
     /* anti-pattern
